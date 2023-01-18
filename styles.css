@@ -27,3 +27,9 @@ section{
 section input{
     font-family: sans-serif;
 }
+
+@media (max-width: 500px){
+    #reviews{
+        display: none;
+    }
+}
