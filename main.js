@@ -1,11 +1,14 @@
 /* <---------------------Selectors---------------------> */
 let select = document.querySelector("#titles")
 let movieDetails = document.querySelector("#display-info")
+let showPeopleButton = document.querySelector("#show-people")
+let showPeopleList = document.querySelector(".js-ol")
 
 /* <---------------------Event Listeners---------------------> */
 select.addEventListener("change", renderMovieDescription)
-/* <---------------------Functions---------------------> */
+showPeopleButton.addEventListener("click", showPeople)
 
+/* <---------------------Functions---------------------> */
 
 /* <----------On load functions----------> */
 async function fetchAllMovies(type){
@@ -18,7 +21,6 @@ async function fetchAllMovies(type){
     
     return response
 }
-    // Add code you want to run on page load here
 
 async function populateSelect(){
     let allMovies = await fetchAllMovies("films")
@@ -43,18 +45,7 @@ async function renderMovieDescription(){
     const allMovieInfo = await fetchAllMovies("films")
     const movieInfo = allMovieInfo.find(movie => movie.id == select.value)
 
-    let responseRaw = await fetch(endpoint + e.target.value)
-    
-    let response = await responseRaw.json()
-    
-    return response
-}
-
-async function renderMovieDescription(e){
-    const movieInfo = await fetchSinlgeMovieInfo(e)
-    console.log(movieInfo)
-
-    movieDetails.textContent = ""
+    movieDetails.innerHTML = ""
 
     const movieTitle = document.createElement("h3")
     movieTitle.textContent = movieInfo.title
@@ -65,6 +56,22 @@ async function renderMovieDescription(e){
     const movieDescription = document.createElement("p")
     movieDescription.textContent = movieInfo.description
 
-    movieDetails.append(movieTitle, movieReleseYear, movieDescription )
+    movieDetails.append(movieTitle, movieReleseYear, movieDescription)
+    showPeopleButton.classList.remove("disabled")
+}
+
+//Get people list
+async function showPeople(){
+    const allPeopleInfo = await fetchAllMovies("people")
+
+    const peopleInfo = allPeopleInfo.filter(person => {
+        return person.films.some(film => film.includes(select.value))
+    }) 
     
+    peopleInfo.forEach(person => {
+        let listItem = document.createElement("li")
+        listItem.textContent = person.name
+        showPeopleList.append(listItem)
+        showPeopleButton.classList.add("disabled")
+    })
 }

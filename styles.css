@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+.disabled{
+    pointer-events: none;
+    opacity: .5;
+}
+
 body{
     background-color: lavender;
     font-family: monospace;
