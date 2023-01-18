@@ -3,10 +3,13 @@ let select = document.querySelector("#titles")
 let movieDetails = document.querySelector("#display-info")
 let showPeopleButton = document.querySelector("#show-people")
 let showPeopleList = document.querySelector(".js-ol")
+let resetList = document.querySelector(".js-review-ul")
+let resetButton = document.querySelector("#reset-reviews")
 
 /* <---------------------Event Listeners---------------------> */
 select.addEventListener("change", renderMovieDescription)
 showPeopleButton.addEventListener("click", showPeople)
+resetButton.addEventListener("click", resetReviewSection)
 
 /* <---------------------Functions---------------------> */
 
@@ -44,9 +47,9 @@ setTimeout(run, 1000);
 async function renderMovieDescription(){
     const allMovieInfo = await fetchAllMovies("films")
     const movieInfo = allMovieInfo.find(movie => movie.id == select.value)
-
+    
     movieDetails.innerHTML = ""
-
+    
     const movieTitle = document.createElement("h3")
     movieTitle.textContent = movieInfo.title
     
@@ -55,12 +58,19 @@ async function renderMovieDescription(){
     
     const movieDescription = document.createElement("p")
     movieDescription.textContent = movieInfo.description
-
+    
     movieDetails.append(movieTitle, movieReleseYear, movieDescription)
     showPeopleButton.classList.remove("disabled")
 }
+/* <----------Add Review----------> */
 
-//Get people list
+
+/* <----------Review Reset Button----------> */
+function resetReviewSection(){
+    resetList.innerHTML = ""
+}
+
+/* <----------Show List Button----------> */
 async function showPeople(){
     const allPeopleInfo = await fetchAllMovies("people")
 
@@ -72,6 +82,7 @@ async function showPeople(){
         let listItem = document.createElement("li")
         listItem.textContent = person.name
         showPeopleList.append(listItem)
+
         showPeopleButton.classList.add("disabled")
     })
 }
