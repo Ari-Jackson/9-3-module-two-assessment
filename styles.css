@@ -28,6 +28,10 @@ section input{
     font-family: sans-serif;
 }
 
+#display-info > * {
+    padding: .5rem 0;
+}
+
 @media (max-width: 500px){
     #reviews{
         display: none;

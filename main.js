@@ -1,19 +1,68 @@
 /* <---------------------Selectors---------------------> */
+let select = document.querySelector("#titles")
+let movieDetails = document.querySelector("#display-info")
 
 /* <---------------------Event Listeners---------------------> */
-
+select.addEventListener("change", renderMovieDescription)
 /* <---------------------Functions---------------------> */
 
 
 /* <----------On load functions----------> */
-// To ensure Cypress tests work as expeded, add any code/functions that you would like to run on page load inside this function
+async function run() {
+    async function fetchAllMovies(){
+        let endpoint = "https://resource-ghibli-api.onrender.com/films/"
+        
+        let responseRaw = await fetch(endpoint)
+        
+        let response = await responseRaw.json()
+        
+        return response
+    }
+    // Add code you want to run on page load here
+    
+    async function populateSelect(){
+        let allMovies = await fetchAllMovies()
+        
+        
+        allMovies.forEach(movie =>{
+            const option = document.createElement('option')
+            option.setAttribute("value", movie.id)
+            option.textContent = movie.title
+            
+            select.append(option)
+        })
+    }
+    
+    populateSelect()   
+}
+setTimeout(run, 1000);
+/* <----------On Change functions----------> */
 
-function run() {
- // Add code you want to run on page load here
+async function fetchSinlgeMovieInfo(e){
+    let endpoint = "https://resource-ghibli-api.onrender.com/films/"
+    
+    let responseRaw = await fetch(endpoint + e.target.value)
+    
+    let response = await responseRaw.json()
+    
+    return response
 }
 
-// This function will "pause" the functionality expected on load long enough to allow Cypress to fully load
-// So that testing can work as expected for now
-// A non-hacky solution is being researched
+async function renderMovieDescription(e){
+    const movieInfo = await fetchSinlgeMovieInfo(e)
+    console.log(movieInfo)
 
-setTimeout(run, 1000);
+    movieDetails.textContent = ""
+
+    const movieTitle = document.createElement("h3")
+    movieTitle.textContent = movieInfo.title
+    
+    const movieReleseYear = document.createElement("p")
+    movieReleseYear.textContent = movieInfo.release_date
+    
+    const movieDescription = document.createElement("p")
+    movieDescription.textContent = movieInfo.description
+
+    movieDetails.append(movieTitle, movieReleseYear, movieDescription )
+    
+}
