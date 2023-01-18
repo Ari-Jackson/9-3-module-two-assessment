@@ -3,3 +3,16 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body{
+    background-color: lavender;
+    font-family: monospace;
+}
+
+header{
+    width: 75%;
+    height: 25vh;
+    background-color: skyblue;
+    margin: 0 auto;
+    display: flex;
+}
