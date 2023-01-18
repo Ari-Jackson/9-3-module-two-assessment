@@ -8,39 +8,41 @@ select.addEventListener("change", renderMovieDescription)
 
 
 /* <----------On load functions----------> */
-async function run() {
-    async function fetchAllMovies(){
-        let endpoint = "https://resource-ghibli-api.onrender.com/films/"
-        
-        let responseRaw = await fetch(endpoint)
-        
-        let response = await responseRaw.json()
-        
-        return response
-    }
-    // Add code you want to run on page load here
+async function fetchAllMovies(type){
+    let baseURL = "https://resource-ghibli-api.onrender.com/"
+    let endpoint= type
     
-    async function populateSelect(){
-        let allMovies = await fetchAllMovies()
-        
-        
-        allMovies.forEach(movie =>{
-            const option = document.createElement('option')
-            option.setAttribute("value", movie.id)
-            option.textContent = movie.title
-            
-            select.append(option)
-        })
-    }
+    let responseRaw = await fetch(baseURL + endpoint)
     
-    populateSelect()   
+    let response = await responseRaw.json()
+    
+    return response
 }
+    // Add code you want to run on page load here
+
+async function populateSelect(){
+    let allMovies = await fetchAllMovies("films")
+    
+    allMovies.forEach(movie =>{
+        const option = document.createElement('option')
+        option.setAttribute("value", movie.id)
+        option.textContent = movie.title
+        
+        select.append(option)
+    })
+}
+
+async function run() {
+    await populateSelect()   
+}
+
 setTimeout(run, 1000);
 /* <----------On Change functions----------> */
 
-async function fetchSinlgeMovieInfo(e){
-    let endpoint = "https://resource-ghibli-api.onrender.com/films/"
-    
+async function renderMovieDescription(){
+    const allMovieInfo = await fetchAllMovies("films")
+    const movieInfo = allMovieInfo.find(movie => movie.id == select.value)
+
     let responseRaw = await fetch(endpoint + e.target.value)
     
     let response = await responseRaw.json()
