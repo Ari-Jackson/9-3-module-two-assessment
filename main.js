@@ -1,18 +1,24 @@
 /* <---------------------Selectors---------------------> */
 let select = document.querySelector("#titles")
+
 let movieDetails = document.querySelector("#display-info")
+
 let showPeopleButton = document.querySelector("#show-people")
-let showPeopleList = document.querySelector(".js-ol")
-let resetList = document.querySelector(".js-review-ul")
+let showPeopleList = document.querySelector(".js-people-list")
+
+let reviewField = document.querySelector("#review")
+let reviewList = document.querySelector(".js-review-list")
+let submitReviewButton = document.querySelector(".js-submit-review")
+
 let resetButton = document.querySelector("#reset-reviews")
 
 /* <---------------------Event Listeners---------------------> */
 select.addEventListener("change", renderMovieDescription)
 showPeopleButton.addEventListener("click", showPeople)
 resetButton.addEventListener("click", resetReviewSection)
+submitReviewButton.addEventListener("click", submitReview)
 
 /* <---------------------Functions---------------------> */
-
 /* <----------On load functions----------> */
 async function fetchAllMovies(type){
     let baseURL = "https://resource-ghibli-api.onrender.com/"
@@ -29,6 +35,7 @@ async function populateSelect(){
     let allMovies = await fetchAllMovies("films")
     
     allMovies.forEach(movie =>{
+        console.log(movie)
         const option = document.createElement('option')
         option.setAttribute("value", movie.id)
         option.textContent = movie.title
@@ -62,15 +69,27 @@ async function renderMovieDescription(){
     movieDetails.append(movieTitle, movieReleseYear, movieDescription)
     showPeopleButton.classList.remove("disabled")
 }
-/* <----------Add Review----------> */
+/* <----------On Click: Add Review----------> */
+function submitReview(e){
+    e.preventDefault()
 
+    let reviewText = reviewField.value
 
-/* <----------Review Reset Button----------> */
-function resetReviewSection(){
-    resetList.innerHTML = ""
+    let listItem = document.createElement("li")
+    let title =  document.querySelector("#display-info h3")
+
+    listItem.innerHTML = `<strong>${title.textContent}: </strong> ${reviewText}`
+
+    reviewList.append(listItem)
+    reviewField.value = ""
 }
 
-/* <----------Show List Button----------> */
+/* <----------On Click: Review Reset----------> */
+function resetReviewSection(){
+    reviewList.innerHTML = ""
+}
+
+/* <----------On Click: Show List Button----------> */
 async function showPeople(){
     const allPeopleInfo = await fetchAllMovies("people")
 
