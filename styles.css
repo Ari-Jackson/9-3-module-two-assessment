@@ -16,3 +16,14 @@ header{
     margin: 0 auto;
     display: flex;
 }
+
+section{
+    margin: 0 auto;
+    width:75%;
+    padding: 0 0 2rem 0;
+    /* border: black dashed 1px; */
+}
+
+section input{
+    font-family: sans-serif;
+}
