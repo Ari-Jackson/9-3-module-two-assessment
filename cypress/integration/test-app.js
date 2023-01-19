@@ -216,6 +216,8 @@ describe("Error handling for reviews", () => {
     stub = cy.stub();
     cy.on("window:alert", stub);
     cy.get("select").select("");
+    /*this line is so cypress waits for the blank option to load before continuing. */
+    cy.wait(1000)
     cy.get("input[type='text']").type("Yes! Best movie ever!");
     cy.get('input[type="submit"]')
       .click()
