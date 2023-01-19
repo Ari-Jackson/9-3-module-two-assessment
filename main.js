@@ -35,7 +35,6 @@ async function populateSelect(){
     let allMovies = await fetchAllMovies("films")
     
     allMovies.forEach(movie =>{
-        console.log(movie)
         const option = document.createElement('option')
         option.setAttribute("value", movie.id)
         option.textContent = movie.title
@@ -56,27 +55,33 @@ async function renderMovieDescription(){
     const movieInfo = allMovieInfo.find(movie => movie.id == select.value)
     
     movieDetails.innerHTML = ""
-    
+
+    if(!!movieInfo){
     const movieTitle = document.createElement("h3")
     movieTitle.textContent = movieInfo.title
-    
+
     const movieReleseYear = document.createElement("p")
     movieReleseYear.textContent = movieInfo.release_date
-    
+
     const movieDescription = document.createElement("p")
     movieDescription.textContent = movieInfo.description
-    
+
     movieDetails.append(movieTitle, movieReleseYear, movieDescription)
     showPeopleButton.classList.remove("disabled")
+    }
 }
 /* <----------On Click: Add Review----------> */
 function submitReview(e){
     e.preventDefault()
 
     let reviewText = reviewField.value
-
     let listItem = document.createElement("li")
     let title =  document.querySelector("#display-info h3")
+
+    if(!title){
+        alert("Please select a movie first")
+        return
+    }
 
     listItem.innerHTML = `<strong>${title.textContent}: </strong> ${reviewText}`
 
